@@ -1,0 +1,3 @@
+# Project exclude paths
+/frontend/node_modules/
+/venv/
