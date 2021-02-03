@@ -16,7 +16,6 @@ BOOKS_PER_SHELF = 8
 '''
 
 
-
 def paginate_books(request, selection):
     page = request.args.get('page', 1, type=int)
     start = (page - 1) * BOOKS_PER_SHELF
@@ -28,7 +27,6 @@ def paginate_books(request, selection):
     return current_books
 
 
-
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
@@ -38,9 +36,9 @@ def create_app(test_config=None):
     # CORS Headers
     @app.after_request
     def after_request(response):
-            response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-    return response
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        return response
 
     '''
     # @TODO: Write a route that retrieves all books, paginated.
@@ -54,21 +52,20 @@ def create_app(test_config=None):
     @app.route('/books', methods=['GET'])
     def get_books():
 
-            books = Book.query.all()
+        books = Book.query.all()
 
-            page = request.args.get('page', 1, type=int)
-            start = (page - 1) * BOOKS_PER_SHELF
-            end = start + BOOKS_PER_SHELF
+        page = request.args.get('page', 1, type=int)
+        start = (page - 1) * BOOKS_PER_SHELF
+        end = start + BOOKS_PER_SHELF
 
-            formatted_books = [book.format() for book in books]
-            current_books = formatted_books[start:end]
+        formatted_books = [book.format() for book in books]
+        current_books = formatted_books[start:end]
 
-            return jsonify()({
-                    'success':True,
-                    'books': current_books,
-                    'total_books': len(formatted_books)
-            })
-
+        return jsonify()({
+            'success': True,
+            'books': current_books,
+            'total_books': len(formatted_books)
+        })
 
     '''
     # @TODO: Write a route that will update a single book's rating.
@@ -77,7 +74,6 @@ def create_app(test_config=None):
     #         Response body keys: 'success'
     # TEST: When completed, you will be able to click on stars to update a book's rating and it will persist after refresh
     '''
-
 
     @app.route('/books/<int:book_id>')
     def get_specific_book(book_id):
@@ -92,8 +88,7 @@ def create_app(test_config=None):
                 'book': book.format()
             })
 
-
-    @app.route('/books/<int:book_id', methods=['PATCH'])
+    @app.route('/books/<int:book_id>', methods=['PATCH'])
     def update_book(book_id):
         body = request.get_json()
 
@@ -115,7 +110,6 @@ def create_app(test_config=None):
         except:
             abort(400)
 
-
     '''
     # @TODO: Write a route that will delete a single book.
     #        Response body keys: 'success', 'deleted'(id of deleted book), 'books' and 'total_books'
@@ -123,7 +117,6 @@ def create_app(test_config=None):
     
     # TEST: When completed, you will be able to delete a single book by clicking on the trashcan.
     '''
-
 
     @app.route('/books/<int:book_id>', methods=['DELETE'])
     def delete_book(book_id):
@@ -152,7 +145,6 @@ def create_app(test_config=None):
     # TEST: When completed, you will be able to a new book using the form. Try doing so from the last page of books.
     #       Your new book should show up immediately after you submit it at the end of the page.
     '''
-
 
     @app.route('/books', methods=['POST'])
     def create_book():
@@ -191,7 +183,6 @@ def create_app(test_config=None):
         except:
             abort(422)
 
-
     @app.errorhandler(404)
     def not_found(error):
         return jsonify({
@@ -199,7 +190,6 @@ def create_app(test_config=None):
             'error': 404,
             'message': 'resource not found'
         }), 404
-
 
     @app.errorhandler(422)
     def unprocessable(error):
@@ -209,7 +199,6 @@ def create_app(test_config=None):
             'message': 'unprocessable'
         }), 422
 
-
     @app.errorhandler(400)
     def bad_request(error):
         return jsonify({
@@ -218,7 +207,6 @@ def create_app(test_config=None):
             'message': 'bad request'
         }), 400
 
-
     @app.errorhandler(405)
     def not_found(error):
         return jsonify({
@@ -226,6 +214,5 @@ def create_app(test_config=None):
             'error': 405,
             'message': 'not found'
         }), 405
-
 
         return app
