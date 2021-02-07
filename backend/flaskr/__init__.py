@@ -61,7 +61,7 @@ def create_app(test_config=None):
         formatted_books = [book.format() for book in books]
         current_books = formatted_books[start:end]
 
-        return jsonify()({
+        return jsonify({
             'success': True,
             'books': current_books,
             'total_books': len(formatted_books)
@@ -90,6 +90,7 @@ def create_app(test_config=None):
 
     @app.route('/books/<int:book_id>', methods=['PATCH'])
     def update_book(book_id):
+
         body = request.get_json()
 
         try:
@@ -121,7 +122,7 @@ def create_app(test_config=None):
     @app.route('/books/<int:book_id>', methods=['DELETE'])
     def delete_book(book_id):
         try:
-            book = Book.query.filter(Book.id == book_id).one_or_none()
+            book = Book.query.filter(Book.id == book_id).one_or_none() #make sure the book exist
 
             if book is None:
                 abort(404)
@@ -134,7 +135,7 @@ def create_app(test_config=None):
                 'success': True,
                 'deleted': book_id,
                 'bookw': current_books,
-                'total_books': len(Book.query.all())
+                'total_books': len(Book.query.all()) #keep pagination updated
             })
         except:
             abort(422)
@@ -183,6 +184,16 @@ def create_app(test_config=None):
         except:
             abort(422)
 
+    # @TODO: Review the above code for route handlers.
+    #        Pay special attention to the status codes used in the aborts since those are relevant for this task!
+
+    # @TODO: Write error handler decorators to handle AT LEAST status codes 400, 404, and 422.
+
+    # TEST: Practice writing curl requests. Write some requests that you know will error in expected ways.
+    #       Make sure they are returning as expected. Do the same for other misformatted requests or requests missing data.
+    #       If you find any error responses returning as HTML, write new error handlers for them.
+    # 1xx Informational / 2xx Success / 3xx Redirection / 4xx Client Error / 5xx Server Error
+
     @app.errorhandler(404)
     def not_found(error):
         return jsonify({
@@ -212,7 +223,13 @@ def create_app(test_config=None):
         return jsonify({
             'success': False,
             'error': 405,
-            'message': 'not found'
+            'message': 'method not allowed'
         }), 405
 
-        return app
+    return app
+
+'''
+curl http://127.0.0.1:5000/books/8 -X PATCH -H "Content-Type: application/json" -d '{"rating":"1"}' 
+
+'''
+
