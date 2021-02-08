@@ -49,22 +49,18 @@ def create_app(test_config=None):
     # TEST: When completed, the webpage will display books including title, author, and rating shown as stars
     '''
 
-    @app.route('/books', methods=['GET'])
-    def get_books():
+    @app.route('/books')
+    def retrieve_books():
+        selection = Book.query.order_by(Book.id).all()
+        current_books = paginate_books(request, selection)
 
-        books = Book.query.all()
-
-        page = request.args.get('page', 1, type=int)
-        start = (page - 1) * BOOKS_PER_SHELF
-        end = start + BOOKS_PER_SHELF
-
-        formatted_books = [book.format() for book in books]
-        current_books = formatted_books[start:end]
+        if len(current_books) == 0:
+            abort(404)
 
         return jsonify({
             'success': True,
             'books': current_books,
-            'total_books': len(formatted_books)
+            'total_books': len(Book.query.all())
         })
 
     '''
