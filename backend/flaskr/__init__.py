@@ -130,7 +130,7 @@ def create_app(test_config=None):
             return jsonify({
                 'success': True,
                 'deleted': book_id,
-                'bookw': current_books,
+                'books': current_books,
                 'total_books': len(Book.query.all()) #keep pagination updated
             })
         except:
@@ -189,6 +189,12 @@ def create_app(test_config=None):
     #       Make sure they are returning as expected. Do the same for other misformatted requests or requests missing data.
     #       If you find any error responses returning as HTML, write new error handlers for them.
     # 1xx Informational / 2xx Success / 3xx Redirection / 4xx Client Error / 5xx Server Error
+
+    # @TODO: Create a new endpoint or update a previous endpoint to handle searching for a team in the title
+    #        the body argument is called 'search' coming from the frontend.
+    #        If you use a different argument, make sure to update it in the frontend code.
+    #        The endpoint will need to return success value, a list of books for the search and the number of books with the search term
+    #        Response body keys: 'success', 'books' and 'total_books'
 
     @app.errorhandler(404)
     def not_found(error):
