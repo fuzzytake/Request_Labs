@@ -118,7 +118,7 @@ def create_app(test_config=None):
     @app.route('/books/<int:book_id>', methods=['DELETE'])
     def delete_book(book_id):
         try:
-            book = Book.query.filter(Book.id == book_id).one_or_none() #make sure the book exist
+            book = Book.query.filter(Book.id == book_id).one_or_none()  # make sure the book exist
 
             if book is None:
                 abort(404)
@@ -131,8 +131,9 @@ def create_app(test_config=None):
                 'success': True,
                 'deleted': book_id,
                 'books': current_books,
-                'total_books': len(Book.query.all()) #keep pagination updated
+                'total_books': len(Book.query.all())  # keep pagination updated
             })
+
         except:
             abort(422)
 
@@ -230,8 +231,8 @@ def create_app(test_config=None):
 
     return app
 
+
 '''
 curl http://127.0.0.1:5000/books/8 -X PATCH -H "Content-Type: application/json" -d '{"rating":"1"}' 
 
 '''
-
